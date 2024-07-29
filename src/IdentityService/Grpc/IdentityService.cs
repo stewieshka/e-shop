@@ -1,11 +1,11 @@
 ﻿using Grpc.Core;
-using IdentityService.Application.Authentication.Commands.Login;
-using IdentityService.Application.Authentication.Commands.Register;
+using IdentityService.Application.Authentication.Login;
+using IdentityService.Application.Authentication.Register;
 using MediatR;
 
-namespace IdentityService.GrpcServices;
+namespace IdentityService.Grpc;
 
-public class AuthService(ISender sender) : Auth.AuthBase
+public class IdentityService(ISender sender) : Identity.IdentityBase
 {
     public override async Task<RegisterResponse> Register(RegisterRequest request, ServerCallContext context)
     {

@@ -1,4 +1,4 @@
-﻿namespace IdentityService.Domain.Users;
+﻿namespace IdentityService.Domain;
 
 public class User(Guid id, string email, string username, string passwordHash)
 {

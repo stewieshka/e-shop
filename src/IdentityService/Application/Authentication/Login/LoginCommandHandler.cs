@@ -1,11 +1,12 @@
 ﻿using Grpc.Core;
+using IdentityService.Jwt;
 using IdentityService.Persistence.Repositories;
 using IdentityService.Services;
 using MediatR;
 
 namespace IdentityService.Application.Authentication.Login;
 
-public class LoginCommandHandler(UserRepository userRepository) : IRequestHandler<LoginCommand, LoginResponse>
+public class LoginCommandHandler(UserRepository userRepository, JwtProvider jwtProvider) : IRequestHandler<LoginCommand, LoginResponse>
 {
     public async Task<LoginResponse> Handle(LoginCommand command, CancellationToken cancellationToken)
     {
@@ -23,8 +24,7 @@ public class LoginCommandHandler(UserRepository userRepository) : IRequestHandle
             throw new RpcException(new Status(StatusCode.Unauthenticated, "Invalid password"));
         }
 
-        // TODO: Сделать генератор JWT
-        var token = "new token";
+        var token = jwtProvider.GenerateToken(user);
 
         return new LoginResponse
         {

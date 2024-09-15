@@ -1,0 +1,71 @@
+﻿version: "3.9"
+
+services:
+  
+  gateway.api:
+    image: ${DOCKER_REGISTRY-}gatewayapi
+    build:
+      context: .\src\ApiGateway
+      dockerfile: Dockerfile
+    ports:
+      - "5003:5003"
+    networks:
+      - proxybackend
+  
+  user-service:
+    container_name: user-service
+    build:
+      context: .\src\UserService
+      dockerfile: Dockerfile
+    ports:
+      - "5002:5002"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Database__ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=eshop;Username=admin;Password=admin;
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - proxybackend
+  
+  product-service:
+    container_name: product-service
+    build:
+      context: .\src\ProductService
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Database__ConnectionStrings__DefaultConnection=Host=db;Port=5432;Database=eshop;Username=admin;Password=admin;
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - proxybackend
+    
+  db:
+    container_name: eshop-db
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: eshop
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d product_service && pg_isready -U postgres -d user_service" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - proxybackend
+      
+volumes:
+  postgres_data:
+    
+networks:
+  proxybackend:
+    driver: bridge

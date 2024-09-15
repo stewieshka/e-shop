@@ -2,6 +2,7 @@ using Application.Common.Interfaces;
 using Application.Common.Interfaces.Persistence;
 using Application.Common.Interfaces.Persistence.Repositories;
 using Application.Common.Interfaces.Services;
+using Domain.Sessions;
 using Infrastructure.Configuration;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Database;
@@ -23,7 +24,11 @@ public static class DependencyInjection
 
         services.AddScoped<IUserRepository, UserRepository>();
 
+        services.AddScoped<ISessionRepository, SessionRepository>();
+
         services.Configure<JwtOptions>(configuration.GetSection(nameof(JwtOptions)));
+
+        services.AddScoped<IJwtProvider, JwtProvider>();
 
         // в будущем затестить синглтон
         services.AddScoped<IPasswordHasher, PasswordHasher>();

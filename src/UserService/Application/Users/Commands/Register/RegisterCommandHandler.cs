@@ -26,8 +26,8 @@ public class RegisterCommandHandler(
             Id = Guid.NewGuid(),
             Email = command.Email,
             Username = command.Username,
-            PasswordSalt = salt.ToString(),
-            PasswordHash = hash.ToString()
+            PasswordSalt = Convert.ToBase64String(salt),
+            PasswordHash = Convert.ToBase64String(hash)
         };
 
         var result = await userRepository.CreateAsync(user);

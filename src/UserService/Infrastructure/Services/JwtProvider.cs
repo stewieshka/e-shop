@@ -15,16 +15,16 @@ public class JwtProvider(IOptions<JwtOptions> jwtOptions) : IJwtProvider
 
     public string GenerateAccessToken(User user)
     {
-        var signingCredintials = new SigningCredentials(
-            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey)), SecurityAlgorithms.Sha256);
+        var signingCredentials = new SigningCredentials(
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SecretKey)), SecurityAlgorithms.Sha512);
 
         var jwtSecurityToken = new JwtSecurityToken(
-            signingCredentials: signingCredintials,
+            signingCredentials: signingCredentials,
             expires: DateTime.UtcNow.AddMinutes(15),
-            claims: new[]
-            {
+            claims:
+            [
                 new Claim("userId", user.Id.ToString())
-            });
+            ]);
 
         var accessToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken);
 

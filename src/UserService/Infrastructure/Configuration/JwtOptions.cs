@@ -1,4 +1,8 @@
 namespace Infrastructure.Configuration;
 
-public record JwtOptions(
-    string SecretKey, string Issuer, string Audience);
+public class JwtOptions
+{
+    public required string SecretKey { get; init; }
+    public required string Issuer { get; init; }
+    public required string Audience { get; init; }
+}

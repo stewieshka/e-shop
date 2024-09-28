@@ -11,7 +11,7 @@ public static class DbInitializer
 
         var upgrader = DeployChanges
             .To.PostgresqlDatabase(connectionString)
-            .WithScriptsEmbeddedInAssembly(Assembly.GetExecutingAssembly())
+            .WithScriptsEmbeddedInAssembly(typeof(DbInitializer).Assembly)
             .WithTransaction()
             .LogToConsole()
             .Build();

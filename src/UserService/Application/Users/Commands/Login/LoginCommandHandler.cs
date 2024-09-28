@@ -20,8 +20,8 @@ public class LoginCommandHandler
             throw new RpcException(new Status(StatusCode.NotFound, "User with entered email was not found"));
         }
 
-        var passwordCheckResult = passwordHasher.Verify(command.Password, Encoding.UTF8.GetBytes(user.PasswordSalt),
-            Encoding.UTF8.GetBytes(user.PasswordHash));
+        var passwordCheckResult = passwordHasher.Verify(command.Password, Convert.FromBase64String(user.PasswordSalt),
+            Convert.FromBase64String(user.PasswordHash));
 
         if (!passwordCheckResult)
         {

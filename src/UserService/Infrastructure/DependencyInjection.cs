@@ -33,8 +33,6 @@ public static class DependencyInjection
         // в будущем затестить синглтон
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         
-        DbInitializer.Initialize(configuration[DbConstants.DefaultConnectionStringPath]!);
-        
         return services;
     }
 }
